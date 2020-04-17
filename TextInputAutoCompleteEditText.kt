@@ -1,11 +1,10 @@
-package com.backroomsoftwarellc.app.lib.ui
 
 import android.content.Context
 import android.util.AttributeSet
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView
-import com.backroomsoftwarellc.app.lib.R
+import R
 import com.google.android.material.textfield.TextInputLayout
 
 
