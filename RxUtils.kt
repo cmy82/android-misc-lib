@@ -1,8 +1,7 @@
-package com.backroomsoftwarellc.app.lib.ui.util
 
 import android.widget.EditText
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView
-import com.backroomsoftwarellc.app.lib.ui.TextInputAutoCompleteEditText
+import TextInputAutoCompleteEditText
 import com.google.android.material.textfield.TextInputEditText
 import com.jakewharton.rxbinding3.widget.textChanges
 import io.reactivex.Observable
