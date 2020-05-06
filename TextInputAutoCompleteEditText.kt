@@ -1,10 +1,8 @@
-
 import android.content.Context
 import android.util.AttributeSet
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView
-import R
 import com.google.android.material.textfield.TextInputLayout
 
 
@@ -22,7 +20,27 @@ class TextInputAutoCompleteEditText(context: Context?, attrs: AttributeSet?, def
             if (parent is TextInputLayout) {
                 outAttrs.hintText = parent.hint
             }
+            // TextInputLayout can use an internal layout for it's children so may not be a direct child
+            // and have another layout between EditText
+            val gParent = parent.parent
+            if (gParent is TextInputLayout) {
+                outAttrs.hintText = gParent.hint
+            }
         }
         return ic
+    }
+
+    override fun getHint(): CharSequence {
+        val parent = parent
+        if(parent is TextInputLayout){
+            val hn : CharSequence? = parent.hint
+            return hn!!
+        }
+        val gParent = parent.parent
+        if(gParent is TextInputLayout){
+            val hn : CharSequence? = gParent.hint
+            return hn!!
+        }
+        return ""
     }
 }
