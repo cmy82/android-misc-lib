@@ -26,9 +26,12 @@ class AutoSuggestAdapter<T : Any>(context: Context, private val resource: Int, i
             inflater.inflate(resource, parent, false)
         } else convertView
 
-        val item : T = suggestions[position]
-        if(v is TextView) v.text = item.toString()
-        else customLayoutHandler?.invoke(v,item)
+        if(suggestions.size > 0 && position < suggestions.size) {
+            val item: T = suggestions[position]
+            if (v is TextView) v.text = item.toString()
+            else customLayoutHandler?.invoke(v, item)
+        }
+        
         return v
     }
 
@@ -56,13 +59,10 @@ class AutoSuggestAdapter<T : Any>(context: Context, private val resource: Int, i
     inner class ItemFilter() : Filter() {
         override fun performFiltering(constraint: CharSequence?): FilterResults {
             if(constraint != null){
-                Log.d(TAG, "Filtering on constraint: $constraint")
                 suggestions.clear()
-                Log.d(TAG, "Suggestions : $suggestions | Items : $items")
                 items.forEach { item ->
                     if(item.toString().toLowerCase().contains(constraint.toString().toLowerCase())) suggestions.add(item)
                 }
-                Log.d(TAG, "Returned suggestions : ${suggestions.size} : $suggestions")
                 val fResults : FilterResults = FilterResults()
                 fResults.values = suggestions
                 fResults.count = suggestions.size
