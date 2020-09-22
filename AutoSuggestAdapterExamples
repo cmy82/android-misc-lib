@@ -1,5 +1,6 @@
 //Example 1
 //Shows how to use custom class to present non-string adapter options, with data-binding (stripped down to make generic).
+//Bound field is an instance of TextInputAutoComlpeteEditText.kt
 
 val merchants : AutoSuggestAdapter<StoreInfoSuggestion> = AutoSuggestAdapter(GEBManager.appContext!!, R.layout.layout_auto_suggest_1line_w_image)
 merchants.customLayoutHandler = { view: View, s: StoreInfoSuggestion ->
@@ -22,9 +23,9 @@ val mList : MutableList<StoreInfoSuggestion> =
         m
     }
 merchants.addAll(mList)
-binding.storeMerchantName.threshold = 1
-binding.storeMerchantName.setAdapter(merchants)
-binding.storeMerchantName.onItemClickListener = object : AdapterView.OnItemClickListener {
+binding.boundField.threshold = 1
+binding.boundField.setAdapter(merchants)
+binding.boundField.onItemClickListener = object : AdapterView.OnItemClickListener {
     override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         val sis = parent?.getItemAtPosition(position) as StoreInfoSuggestion
         //Code to run when item selected if needed
