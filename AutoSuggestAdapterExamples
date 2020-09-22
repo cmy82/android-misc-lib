@@ -32,7 +32,7 @@ binding.storeMerchantName.onItemClickListener = object : AdapterView.OnItemClick
 }            
             
 internal class StoreInfoSuggestion(val value1 : String, val value2 : String) {
-    override fun toString(): String = merchant
+    override fun toString(): String = value1
 }
 
 
