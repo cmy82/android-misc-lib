@@ -31,7 +31,7 @@ class AutoSuggestAdapter<T : Any>(context: Context, private val resource: Int, i
             if (v is TextView) v.text = item.toString()
             else customLayoutHandler?.invoke(v, item)
         }
-        
+
         return v
     }
 
@@ -57,6 +57,7 @@ class AutoSuggestAdapter<T : Any>(context: Context, private val resource: Int, i
     }
 
     inner class ItemFilter() : Filter() {
+        private val sync = object {}
         override fun performFiltering(constraint: CharSequence?): FilterResults {
             if(constraint != null){
                 suggestions.clear()
@@ -73,9 +74,9 @@ class AutoSuggestAdapter<T : Any>(context: Context, private val resource: Int, i
 
         override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
             if(results != null && results.count > 0){
-                var filterList : ArrayList<T> = results?.values as ArrayList<T>
+                var filterList : ArrayList<T> = results.values as ArrayList<T>
                 clear()
-                filterList.forEach { item -> add(item) }
+                filterList.toArray().forEach { item -> add(item as T) }
                 notifyDataSetChanged()
             }
         }
