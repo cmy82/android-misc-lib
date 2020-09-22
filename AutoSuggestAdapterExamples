@@ -1,0 +1,38 @@
+//Example 1
+//Shows how to use custom class to present non-string adapter options, with data-binding (stripped down to make generic).
+
+val merchants : AutoSuggestAdapter<StoreInfoSuggestion> = AutoSuggestAdapter(GEBManager.appContext!!, R.layout.layout_auto_suggest_1line_w_image)
+merchants.customLayoutHandler = { view: View, s: StoreInfoSuggestion ->
+    val v = view as LinearLayout
+    val img = v.findViewById<ImageView>(R.id.selector_image)
+    GlideApp.with(context)
+        .load(image_path)
+        .override(128,128)
+        .fitCenter()
+        .into(img)
+    val txt = v.findViewById<TextView>(R.id.selector_text)
+    txt.text = s.merchant
+}
+val mList : MutableList<StoreInfoSuggestion> =
+    if(no_data_avail) ArrayList()
+    else {
+        val h = avail_data as HashMap<Any,Any>
+        val m = ArrayList<StoreInfoSuggestion>()
+        h.forEach { (key, value) -> m.add(StoreInfoSuggestion(value1, value2)) }
+        m
+    }
+merchants.addAll(mList)
+binding.storeMerchantName.threshold = 1
+binding.storeMerchantName.setAdapter(merchants)
+binding.storeMerchantName.onItemClickListener = object : AdapterView.OnItemClickListener {
+    override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        val sis = parent?.getItemAtPosition(position) as StoreInfoSuggestion
+        //Code to run when item selected if needed
+    }
+}            
+            
+internal class StoreInfoSuggestion(val value1 : String, val value2 : String) {
+    override fun toString(): String = merchant
+}
+
+
