@@ -14,23 +14,24 @@ class AutoSuggestAdapter<T : Any>(context: Context, private val resource: Int, i
     private val items : ArrayList<T> = ArrayList()
     private val suggestions : ArrayList<T> = ArrayList()
     var customLayoutHandler : ((View, T) -> Unit)? = null
+    var noSuggestionsHandler : (() -> Unit)? = null
 
     companion object {
-        private const val TAG = "AutoSuggestAdapter"
+        private const val TAG = "[AutoSuggestAdapter] "
     }
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup) : View {
         lateinit var v : View
         v = if(convertView == null){
-            val inflater : LayoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            inflater.inflate(resource, parent, false)
-        } else convertView
+                val inflater : LayoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                inflater.inflate(resource, parent, false)
+            } else convertView
 
         if(suggestions.size > 0 && position < suggestions.size) {
             val item: T = suggestions[position]
             if (v is TextView) v.text = item.toString()
             else customLayoutHandler?.invoke(v, item)
-        }
+        } else noSuggestionsHandler?.invoke()
 
         return v
     }
@@ -62,7 +63,7 @@ class AutoSuggestAdapter<T : Any>(context: Context, private val resource: Int, i
             if(constraint != null){
                 suggestions.clear()
                 items.forEach { item ->
-                    if(item.toString().toLowerCase().contains(constraint.toString().toLowerCase())) suggestions.add(item)
+                    if(item.toString().toLowerCase(Locale.US).contains(constraint.toString().toLowerCase(Locale.US))) suggestions.add(item)
                 }
                 val fResults : FilterResults = FilterResults()
                 fResults.values = suggestions
@@ -78,7 +79,7 @@ class AutoSuggestAdapter<T : Any>(context: Context, private val resource: Int, i
                 clear()
                 filterList.toArray().forEach { item -> add(item as T) }
                 notifyDataSetChanged()
-            }
+            } else noSuggestionsHandler?.invoke()
         }
 
         override fun convertResultToString(resultValue: Any?): CharSequence {
